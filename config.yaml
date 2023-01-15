@@ -1,10 +1,5 @@
 hashtags:
   - "#potholes"
   - "#accident"
-
-tweet_limit: 1000000
-
-bboxCenter: 
-  - 12.971421
-  - 77.594376
+tweet_limit: 100
 search_radius: 100

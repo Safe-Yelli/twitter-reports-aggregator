@@ -1,7 +1,6 @@
 import snscrape.modules.twitter as twitter
 from datetime import datetime
 import csv
-import re # to remove emojis
 import stringOps
 from geopy.distance import distance
 import yaml
@@ -20,7 +19,6 @@ for searchTerm in hashtags:
     raw_tweet_list = []
     final_tweet_list = []
 
-
     # Limiting the tweets to the specified limit
     for count, tweet in enumerate(tweets_search):
         if count >= tweet_limit:
@@ -33,8 +31,8 @@ for searchTerm in hashtags:
             if distance(bboxCenter, [tweet.coordinates.latitude, tweet.coordinates.longitude]).km <= searchRadius:
                 final_tweet_list.append(tweet)
 
-    # Open a CSV file to write the data
-    with open('tweet_data.csv', mode='w', encoding="utf-8") as file:
+    # Open a CSV file to write the data 
+    with open('data/tweet_data.csv', mode='w', encoding="utf-8") as file:
         writer = csv.writer(file)
         # Write the header row
         writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
