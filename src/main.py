@@ -15,13 +15,6 @@ bboxCenter = [12.971421, 77.5946]
 searchRadius = config['search_radius']
 fileName = "data/tweet_data" + "_" + str(date.today()) + ".csv"
 
-with open(fileName, mode='a', encoding="utf-8") as file:
-    writer = csv.writer(file)
-    # Write the header row
-    writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
-    print("Header row written to tweet_data.csv")
-
-
 # Create a new TwitterScraper object
 tweets_search = twitter.TwitterSearchScraper(hashtags).get_items()
 raw_tweet_list = []
@@ -42,8 +35,14 @@ for tweet in raw_tweet_list:
 print(hashtags + " tweets filtered by location")
 
 # Open a CSV file to write the data 
-with open(fileName, mode='a', encoding="utf-8") as file:
+with open(fileName, mode='w', encoding="utf-8") as file:
+
+    file.truncate() #clear file
     writer = csv.writer(file)
+
+    # Write the header row
+    writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
+
     # Iterate through the tweets and save the data to the CSV file
     for tweet in final_tweet_list:
         location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
