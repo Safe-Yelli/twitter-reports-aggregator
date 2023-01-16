@@ -3,6 +3,7 @@ name: Search Everyday
 on:
   schedule:
     - cron: '30 3 * * *' # runs at 12:00 UTC everyday
+  workflow_dispatch:
 
 jobs:
   build:
