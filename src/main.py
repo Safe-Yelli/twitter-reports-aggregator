@@ -12,6 +12,13 @@ hashtags = config['hashtags']
 tweet_limit = config['tweet_limit']
 bboxCenter = [12.971421, 77.5946]
 searchRadius = config['search_radius']
+fileName = "data/tweet_data" + "_" + str(datetime.now()) + ".csv"
+
+with open(fileName, mode='a', encoding="utf-8") as file:
+    writer = csv.writer(file)
+    # Write the header row
+    writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
+    print("Header row written to tweet_data.csv")
 
 for searchTerm in hashtags:
     # Create a new TwitterScraper object
@@ -24,18 +31,18 @@ for searchTerm in hashtags:
         if count >= tweet_limit:
             break # reached max
         raw_tweet_list.append(tweet)
-
+    print(searchTerm + " tweets scraped")
+    
     # Filtering the tweets based on the location
     for tweet in raw_tweet_list:
         if tweet.coordinates:
             if distance(bboxCenter, [tweet.coordinates.latitude, tweet.coordinates.longitude]).km <= searchRadius:
                 final_tweet_list.append(tweet)
+    print(searchTerm + " tweets filtered by location")
 
     # Open a CSV file to write the data 
-    with open('data/tweet_data.csv', mode='w', encoding="utf-8") as file:
+    with open(fileName, mode='a', encoding="utf-8") as file:
         writer = csv.writer(file)
-        # Write the header row
-        writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
         # Iterate through the tweets and save the data to the CSV file
         for tweet in final_tweet_list:
             location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
@@ -46,6 +53,6 @@ for searchTerm in hashtags:
             post_week = post_date.strftime("%U")
             post_year = post_date.strftime("%Y")
             writer.writerow([searchTerm, location, content, post_date, post_year])
-    print(searchTerm + "Data saved to tweet_data.csv")
+    print(searchTerm + " data saved to file")
 
 
