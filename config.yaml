@@ -1,7 +1,3 @@
-hashtags:
-  - "#potholes"
-  - "#accident"
-  - "#harassment"
-  - "#bangalore"
+hashtags: "(Bangalore #eveteasing OR #potholes OR #harassment OR #assault OR #accident OR #stalking)"
 tweet_limit: 10000
 search_radius: 100
