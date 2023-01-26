@@ -24,13 +24,12 @@ tweets_search = twitter.TwitterSearchScraper( search_term, maxEmptyPages=100).ge
 raw_tweet_list = []
 final_tweet_list = []
 
-# # Limiting the tweets to the specified limit
-# for count, tweet in enumerate(tweets_search):
-#     if count >= tweet_limit:
-#         break # reached max
-#     raw_tweet_list.append(tweet)
+# Limiting the tweets to the specified limit
+for count, tweet in enumerate(tweets_search):
+    # if count >= tweet_limit:
+    #     break # reached max
+    raw_tweet_list.append(tweet)
 
-raw_tweet_list = list(tweets_search)
 print(hashtags + " tweets scraped")
 
 # Filtering the tweets based on the loc ation
