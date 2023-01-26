@@ -1,3 +1,3 @@
-hashtags: "(Bangalore #eveteasing OR #potholes OR #harassment OR #assault OR #accident OR #stalking)"
+hashtags: "Bangalore (#harassment OR #assault) since:2020-07-06"
 tweet_limit: 10000
 search_radius: 100
