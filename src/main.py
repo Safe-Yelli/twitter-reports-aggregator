@@ -26,8 +26,8 @@ final_tweet_list = []
 
 # Limiting the tweets to the specified limit
 for count, tweet in enumerate(tweets_search):
-    # if count >= tweet_limit:
-    #     break # reached max
+    if count >= tweet_limit:
+        break # reached max
     raw_tweet_list.append(tweet)
 
 print(hashtags + " tweets scraped")
@@ -39,6 +39,8 @@ if geo_search_enabled:
             if distance(bboxCenter, [tweet.coordinates.latitude, tweet.coordinates.longitude]).km <= searchRadius:
                 final_tweet_list.append(tweet)
     print(hashtags + " tweets filtered by location")
+else:
+    final_tweet_list = raw_tweet_list
 
 # Open a CSV file to write the data 
 with open(fileName, mode='w', encoding="utf-8") as file:
@@ -51,7 +53,8 @@ with open(fileName, mode='w', encoding="utf-8") as file:
 
     # Iterate through the tweets and save the data to the CSV file
     for tweet in final_tweet_list:
-        location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
+        if tweet.coordinates:
+            location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
         content = tweet.rawContent
         content = stringOps.removeEmojis(content) #remove emojis
         post_date = tweet.date
