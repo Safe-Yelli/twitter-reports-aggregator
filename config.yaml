@@ -1,3 +1,5 @@
 hashtags: "Bangalore (#harassment OR #assault) since:2020-07-06"
 tweet_limit: 10000
 search_radius: 100
+since_date: '2020-07-06'
+geo_search_enabled: false
