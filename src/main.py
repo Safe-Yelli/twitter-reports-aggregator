@@ -24,7 +24,7 @@ tweets_search = twitter.TwitterSearchScraper( search_term, maxEmptyPages=100).ge
 raw_tweet_list = []
 final_tweet_list = []
 
-# Limiting the tweets to the specified limit
+# Limiting the tweets to the specified limit (Unimplemented, currently dummy)
 for count, tweet in enumerate(tweets_search):
     if count >= tweet_limit:
         break # reached max
