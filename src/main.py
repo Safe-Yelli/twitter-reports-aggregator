@@ -61,7 +61,10 @@ with open(fileName, mode='w', encoding="utf-8") as file:
         post_day = post_date.strftime("%A")
         post_week = post_date.strftime("%U")
         post_year = post_date.strftime("%Y")
-        writer.writerow([hashtags, location, content, post_date, post_year])
+        if geo_search_enabled:
+            writer.writerow([hashtags, location, content, post_date, post_year])
+        else:
+            writer.writerow([hashtags, "disabled", content, post_date, post_year])
 print(hashtags + " data saved to file")
 
 
