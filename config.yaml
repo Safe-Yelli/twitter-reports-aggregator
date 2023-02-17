@@ -1,5 +1,5 @@
 hashtags: "Bangalore (harassment OR assault OR eveteasing OR sexual assault)"
 tweet_limit: 10000
 search_radius: 100
-since_date: '2020-07-06'
+since_date: '2022-08-01'
 geo_search_enabled: False
