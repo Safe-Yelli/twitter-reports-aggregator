@@ -1,67 +1,77 @@
 import snscrape.modules.twitter as twitter
-from datetime import datetime
-from datetime import date
-import csv
-import stringOps
-from geopy.distance import distance
-import yaml
+from datetime import datetime, date
 
+import yaml
+import pandas as pd
+
+import stringOps
+import geocoder
+
+# Load config file
 with open('config.yaml') as f:
     config = yaml.load(f, Loader=yaml.FullLoader)
-
-hashtags = config['hashtags']
-tweet_limit = config['tweet_limit']
-bboxCenter = [12.971421, 77.5946]
-searchRadius = config['search_radius']
+# Twitter advanced search format
+search_term = config['searchTerm']
+# Date range to search from
 date_since = 'since:' + config['since_date']
-fileName = "data/tweet_data" + "_" + str(date.today()) + ".csv"
+# Add date range to search term
+search_term = search_term + ' ' + date_since
+# For bounding tweets to a bbox
+bboxCenter = [12.971421, 77.5946]
 geo_search_enabled = config['geo_search_enabled']
+searchRadius = config['search_radius']
+# File name to save to
+file_name = "data/tweet_data" + "_" + str(date.today()) + ".csv"
 
-# Create a new TwitterScraper object
-search_term = hashtags + ' ' + date_since
-print(search_term)
-tweets_search = twitter.TwitterSearchScraper( search_term, maxEmptyPages=100).get_items()
+# list to store tweets
 raw_tweet_list = []
 final_tweet_list = []
 
-# Limiting the tweets to the specified limit (Unimplemented, currently dummy)
-for count, tweet in enumerate(tweets_search):
-    if count >= tweet_limit:
-        break # reached max
-    raw_tweet_list.append(tweet)
-
-print(hashtags + " tweets scraped")
-
-# Filtering the tweets based on the loc ation
-if geo_search_enabled:
+def twitterGeoSearch(raw_tweet_list):
+    from geopy.distance import distance
     for tweet in raw_tweet_list:
         if tweet.coordinates:
             if distance(bboxCenter, [tweet.coordinates.latitude, tweet.coordinates.longitude]).km <= searchRadius:
                 final_tweet_list.append(tweet)
-    print(hashtags + " tweets filtered by location")
-else:
-    final_tweet_list = raw_tweet_list
+    print(search_term + " tweets filtered by location")
+    return final_tweet_list
 
-# Open a CSV file to write the data 
-with open(fileName, mode='w', encoding="utf-8") as file:
+def main():
+    raw_tweet_list = twitter.TwitterSearchScraper( search_term, maxEmptyPages=100).get_items()
+    print(search_term + " tweets scraped")
+    
+    if geo_search_enabled:
+        raw_tweet_list = twitterGeoSearch(raw_tweet_list)
 
-    file.truncate() #clear file
-    writer = csv.writer(file)
+    # Create an empty DataFrame to store the data
+    df = pd.DataFrame(columns=['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
 
-    # Write the header row
-    writer.writerow(['searchTerm', 'Location', 'Content', 'Post Date', 'Post Year'])
-
-    # Iterate through the tweets and save the data to the CSV file
-    for tweet in final_tweet_list:
-        if tweet.coordinates:
-            location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
+    # Iterate through the tweets and add the data for each tweet to the DataFrame
+    for tweet in raw_tweet_list:
+        # if tweet.coordinates:
+        #     location = [tweet.coordinates.latitude, tweet.coordinates.longitude]
+        # else:
+        location = geocoder.geocode(tweet)
         content = tweet.rawContent
         content = stringOps.removeEmojis(content) #remove emojis
         post_date = tweet.date
-        post_day = post_date.strftime("%A")
-        post_week = post_date.strftime("%U")
+        # post_day = post_date.strftime("%A")
+        # post_week = post_date.strftime("%U")
         post_year = post_date.strftime("%Y")
-        writer.writerow([hashtags, location, content, post_date, post_year])
-print(hashtags + " data saved to file")
+        df = df.append({'searchTerm': search_term, 'Location': location, 'Content': content, 'Post Date': post_date, 'Post Year': post_year}, ignore_index=True)
+
+    # Write the DataFrame to a CSV file
+    df.to_csv(file_name, index=True)
+    print(search_term + " data saved to file")
+
+if __name__ == "__main__":
+    main()
+
+    
+    
+
+
+
+
 
 
