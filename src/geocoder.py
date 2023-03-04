@@ -4,13 +4,18 @@ import geopy
 import re
 import requests
 
+import spacy.cli 
+
+# Download the English language model for efficiency (small size)
+spacy.cli.download("en_core_web_sm")
+
 geolocator = geopy.geocoders.Nominatim(user_agent="tweetLocator")
 
 # Find all URLs in a tweet
 URLregex = r"(?i)\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'\".,<>?«»“”‘’]))"
 
 # For find named locations in tweets
-nlp = spacy.load('en_core_web_lg')
+nlp = spacy.load('en_core_web_sm')
 
 def getRedirectURL(url):
     response = requests.get(url, allow_redirects=False)
