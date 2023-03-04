@@ -24,7 +24,7 @@ def getRedirectURL(url):
     if response.status_code == 301:
         finalURL =  response.headers['Location']
         # If the response is a Google Maps link, get the final URL
-        if "goo.gl/maps/" in  finalURL:
+        if "goo.gl" in finalURL:
             response = requests.get(url, allow_redirects=True)
             return response.url
         else:
