@@ -1,5 +1,4 @@
-hashtags: "Bangalore (#harassment OR #assault)"
-tweet_limit: 10000
-search_radius: 100
-since_date: '2020-07-06'
+searchTerm: "#PleaseFixMaadi "
+since_date: '2023-01-01'
 geo_search_enabled: False
+search_radius: 100
